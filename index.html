@@ -3,7 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BLUE RUSH | ATUL KHANDARE</title>
+    
+    <title>BLUE RUSH RACER | Developed by Atul Khandare</title>
+    <meta name="description" content="Play Blue Rush Racer, a high-speed neon racing game. Dodge obstacles and break records. Created by Atul Khandare.">
+    <meta name="keywords" content="Blue Rush Racer, Blue Rush Racer Game, Atul Khandare, Neon Racing Game, Three.js Racing, Online Browser Game">
+    <meta name="author" content="Atul Khandare">
+    <meta name="robots" content="index, follow">
+    
+    <meta property="og:title" content="BLUE RUSH RACER - Official Game">
+    <meta property="og:description" content="Experience the neon speed. Play Blue Rush Racer by Atul Khandare.">
+    <meta property="og:type" content="website">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&display=swap" rel="stylesheet">
     
     <style>
@@ -12,42 +21,51 @@
             --neon-red: #ff0055;
             --neon-green: #00ff64;
         }
-
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Orbitron', sans-serif; -webkit-user-select: none; touch-action: none; }
         body { background: #000; overflow: hidden; height: 100vh; width: 100vw; }
-
+        
         #game-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; }
-
+        
         .hud-top { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 100; pointer-events: none; }
         .glass { background: rgba(0, 10, 20, 0.85); border: 1px solid var(--neon-blue); padding: 5px 15px; border-radius: 5px; text-align: center; min-width: 80px; }
         .label { font-size: 7px; color: var(--neon-blue); letter-spacing: 1px; }
         #score-txt, #speed-val { font-size: 18px; font-weight: 900; color: #fff; }
 
-        .ui-controls { position: absolute; bottom: 30px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 1000; align-items: flex-end; }
+        .ui-controls { position: absolute; bottom: 40px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; z-index: 1000; align-items: flex-end; }
         .steering-group { display: flex; gap: 15px; } 
         .pedal-group { display: flex; flex-direction: column; gap: 10px; }
-
         .circle-btn { width: 65px; height: 65px; border-radius: 50%; border: 3px solid var(--neon-blue); background: rgba(0, 240, 255, 0.1); color: var(--neon-blue); font-size: 20px; outline: none; }
         .pedal { width: 90px; height: 50px; border-radius: 6px; font-weight: 900; font-size: 11px; outline: none; letter-spacing: 1px; }
         .brk { border: 2px solid var(--neon-red); background: rgba(255, 0, 85, 0.1); color: var(--neon-red); }
         .gas { border: 2px solid var(--neon-green); background: rgba(0, 255, 100, 0.1); color: var(--neon-green); }
 
+        /* Game Credit at Bottom */
+        .bottom-credit {
+            position: absolute;
+            bottom: 8px;
+            width: 100%;
+            text-align: center;
+            font-size: 8px;
+            color: rgba(0, 240, 255, 0.4);
+            letter-spacing: 1.5px;
+            z-index: 500;
+            text-transform: uppercase;
+        }
+
         .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .glitch { font-size: 12vw; color: #fff; text-shadow: 3px 3px var(--neon-blue); margin-bottom: 25px; text-align: center; }
-
+        .glitch { font-size: 10vw; color: #fff; text-shadow: 3px 3px var(--neon-blue); margin-bottom: 25px; text-align: center; }
         .main-btn { padding: 15px 40px; background: var(--neon-blue); border: none; font-weight: 900; border-radius: 4px; color: #000; box-shadow: 0 0 15px var(--neon-blue); cursor: pointer; }
-
-        .small-credit { font-size: 9px; color: rgba(0, 240, 255, 0.5); position: absolute; bottom: 15px; letter-spacing: 2px; text-transform: uppercase; }
+        
         .mission-box { background: rgba(0, 240, 255, 0.05); padding: 15px 30px; border-radius: 8px; border: 1px solid rgba(0, 240, 255, 0.3); text-align: center; margin-bottom: 20px; width: 220px; }
-        .mission-label { font-size: 8px; color: var(--neon-blue); letter-spacing: 2px; }
         #final-score { font-size: 32px; color: #fff; margin: 5px 0; }
-        .mini-name { font-size: 7px; color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
-
         .hidden { display: none !important; }
     </style>
 </head>
 <body oncontextmenu="return false;">
+
     <div id="game-container"></div>
+    
+    <div class="bottom-credit">Developed by Atul Khandare</div>
 
     <div class="hud-top">
         <div class="glass">
@@ -72,23 +90,22 @@
     </div>
 
     <div id="start-screen" class="overlay">
-        <h1 class="glitch">BLUE RUSH</h1>
+        <h1 class="glitch">BLUE RUSH<br>RACER</h1>
         <button id="start-btn" class="main-btn">INITIATE MISSION</button>
-        <p class="small-credit">Developed by Atul Khandare</p>
+        <p style="font-size: 10px; color: var(--neon-blue); margin-top: 20px;">By Atul Khandare</p>
     </div>
 
     <div id="over-screen" class="overlay hidden">
         <h1 class="glitch" style="color:var(--neon-red); font-size: 10vw;">CRASHED</h1>
         <div class="mission-box">
-            <p class="mission-label">FINAL SCORE</p>
+            <p style="font-size: 8px; color: var(--neon-blue);">FINAL SCORE</p>
             <h2 id="final-score">0</h2>
-            <p class="mini-name">MISSION TERMINATED</p>
+            <p style="font-size: 7px; color: rgba(255,255,255,0.4);">MISSION TERMINATED</p>
         </div>
-        <button onclick="location.reload()" class="main-btn" style="padding: 12px 30px;">REBOOT</button>
+        <button onclick="location.reload()" class="main-btn">REBOOT</button>
     </div>
 
     <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
-    
     <script>
         let scene, camera, renderer, player, speed = 0, score = 0, gameState = "START";
         let currentX = 0, driftAngle = 0;
@@ -181,23 +198,22 @@
                 if(keys.brake) targetSpeed = 0;
                 speed = THREE.MathUtils.lerp(speed, targetSpeed, 0.05);
                 document.getElementById('speed-val').innerText = Math.floor(speed * 20);
-                
+
                 let steer = keys.left ? 0.6 : (keys.right ? -0.6 : 0);
                 driftAngle = THREE.MathUtils.lerp(driftAngle, steer, 0.1);
-                
                 currentX += driftAngle * (speed * 0.15);
                 currentX = Math.max(-10.5, Math.min(10.5, currentX));
-                
+
                 player.position.x = currentX;
                 player.position.z += speed;
                 player.rotation.z = -driftAngle * 0.3;
-                
+
                 camera.position.set(player.position.x * 0.5, 6, player.position.z - 20);
                 camera.lookAt(player.position.x, 1, player.position.z + 30);
-                
+
                 score = Math.floor(player.position.z / 10);
                 document.getElementById('score-txt').innerText = score.toString().padStart(3, '0');
-                
+
                 segments.forEach(s => { if(player.position.z - s.position.z > 50) s.position.z += 1125; });
                 enemies.forEach(e => {
                     if(player.position.z - e.position.z > 50) { e.position.z += 800; e.position.x = (Math.random()-0.5)*18; }
